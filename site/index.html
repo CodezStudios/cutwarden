@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cutwarden: brand-safe video editing for AI agents</title>
+<meta name="description" content="The AI edits; it never generates pixels. Cutwarden gives any MCP client a timeline, motion presets and your brand kit, and enforces brand safety in the tools.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0A0A0C">
+<meta property="og:title" content="cutwarden">
+<meta property="og:description" content="Brand-safe video editing for AI agents, over MCP. Edited, not generated.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--bg:#0A0A0C;--fg:#fff;--accent:#E5262D;--muted:#8A8A93;--card:#141417;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:960px;margin:0 auto;padding:0 20px}
+header{padding:72px 0 32px}
+h1{font-size:clamp(2.4rem,7vw,4rem);line-height:1.05;margin:0 0 16px;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+.lead{color:var(--muted);font-size:1.2rem;max-width:36em}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+a.btn{padding:12px 20px;border-radius:10px;text-decoration:none;font-weight:600;border:1px solid #2a2a30;color:var(--fg)}
+a.btn.p{background:var(--accent);border-color:var(--accent)}
+.hero{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:32px;align-items:center;margin:24px 0 48px}
+video{width:100%;border-radius:14px;background:#000;aspect-ratio:9/16}
+ul{padding-left:1.1em}li{margin:.5em 0}
+section{margin:48px 0}h2{font-size:1.5rem;margin:0 0 12px}
+pre{background:var(--card);padding:16px;border-radius:10px;overflow-x:auto;font-size:.9rem}
+img.sheet{width:100%;height:auto;border-radius:12px}
+footer{color:var(--muted);padding:32px 0 64px;font-size:.9rem}
+a{color:var(--fg)}
+@media(max-width:640px){.hero{grid-template-columns:1fr}video{max-width:260px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>cut<span>warden</span></h1>
+<p class="lead">Brand-safe video editing for AI agents, over MCP. The AI edits. It never generates pixels.</p>
+<div class="cta">
+<a class="btn p" href="https://github.com/YOUR-USER/cutwarden">View on GitHub</a>
+<a class="btn" href="#install">Install</a>
+</div>
+</header>
+
+<div class="hero">
+<video controls muted loop playsinline preload="none" poster="/assets/poster.jpg">
+<source src="/assets/demo.mp4" type="video/mp4">
+</video>
+<ul>
+<li><b>Edited, not generated.</b> Footage is never altered by a model.</li>
+<li><b>Safety in the tools.</b> Only brand color names and font roles are accepted. Safe zones, contrast and reading speed are checked.</li>
+<li><b>The AI can see.</b> It renders frames and contact sheets, reviews them and fixes problems.</li>
+<li><b>Deterministic.</b> Same project and time give the same pixels.</li>
+</ul>
+</div>
+
+<section id="install">
+<h2>Connect it</h2>
+<pre><code>pip install -e .
+claude mcp add cutwarden -e CUTWARDEN_BRAND=/path/to/brand.json -- cutwarden-mcp</code></pre>
+<p>Hosted endpoint: <code>https://&lt;your-worker&gt;.workers.dev/mcp</code> (token required). Needs Python 3.10+ and FFmpeg to self-host. For ChatGPT, Gemini or other remote clients, run <code>cutwarden-mcp --http --port 8100</code> and add the URL as a custom connector.</p>
+</section>
+
+<section>
+<h2>Made entirely by tool calls</h2>
+<img class="sheet" src="/assets/contact-sheet.webp" width="1600" alt="Contact sheet of the demo video" loading="lazy" decoding="async">
+</section>
+
+<footer>MIT licensed. Exports to OTIO, EDL, SRT/VTT, MP4, ProRes, WebM and GIF.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Example Brand",
+  "colors": {"bg": "#0A0A0C", "fg": "#FFFFFF", "accent": "#E5262D", "muted": "#8A8A93", "paper": "#F4F2EE", "ink": "#101010"},
+  "fonts": {"display": "fonts/Inter-Black.otf", "body": "fonts/Inter-Bold.otf"},
+  "logo": null,
+  "safe": {"top": 0.12, "bottom": 0.22, "left": 0.06, "right": 0.10},
+  "loudness_target": -14,
+  "allow_custom_colors": false
+}

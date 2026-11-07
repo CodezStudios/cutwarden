@@ -1,0 +1,8 @@
+{
+  "name": "cutwarden",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./site" },
+  "vars": { "BACKEND_URL": "https://YOUR-HF-USER-cutwarden.hf.space" },
+  "triggers": { "crons": ["0 */12 * * *"] }
+}

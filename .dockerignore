@@ -1,0 +1,9 @@
+.git
+.github
+site
+docs
+tests
+examples
+worker
+node_modules
+__pycache__

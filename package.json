@@ -1,0 +1,6 @@
+{
+  "name": "cutwarden-worker",
+  "private": true,
+  "scripts": { "dev": "wrangler dev", "deploy": "wrangler deploy" },
+  "devDependencies": { "wrangler": "latest" }
+}
