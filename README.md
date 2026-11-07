@@ -157,29 +157,19 @@ Known gaps / roadmap:
 
 MIT. Example fonts (Inter) are SIL OFL; replace with your brand fonts.
 
-## Host it for free (Cloudflare + Hugging Face)
+## Host it for free (Render + Cloudflare)
 
-The site and a token-checking gateway run on the Cloudflare Workers free plan. The renderer (Python + FFmpeg) runs in a free Hugging Face Space. Clients use `https://cutwarden.<subdomain>.workers.dev/mcp?key=<token>`.
+The renderer (Python + FFmpeg) runs as a free Render web service built from the `Dockerfile`. The site and a token-checking gateway run on the Cloudflare Workers free plan. Clients use `https://cutwarden.<subdomain>.workers.dev/mcp?key=<token>`.
 
-**1. Backend (Hugging Face Space)**
-1. Create a Space at huggingface.co/new-space: SDK **Docker**, hardware **CPU basic (free)**, name `cutwarden`.
-2. In the Space > Settings > Variables and secrets, add a secret `CUTWARDEN_GATEWAY_SECRET` (long random string).
-3. Create a write token at huggingface.co/settings/tokens, then from this repo run:
-   `HF_TOKEN=hf_xxx scripts/deploy_space.sh <hf-user>/cutwarden`
-4. The Space builds the Dockerfile. When it shows "Running", `https://<hf-user>-cutwarden.hf.space/health` answers `cutwarden ok`.
+**1. Backend (Render)**
+1. At dashboard.render.com: New > Web Service > connect this repo. Language **Docker**, instance type **Free**.
+2. Add the environment variable `CUTWARDEN_GATEWAY_SECRET` (a long random string) and create the service.
+3. When it is live, `https://<your-service>.onrender.com/health` answers `cutwarden ok`.
 
-**2. Gateway and site (Cloudflare Workers free plan)**
-1. Edit `BACKEND_URL` in `wrangler.jsonc` to `https://<hf-user>-cutwarden.hf.space`.
-2. Run:
-   ```bash
-   npm install
-   npx wrangler login
-   npx wrangler secret put CUTWARDEN_TOKEN             # what clients send
-   npx wrangler secret put CUTWARDEN_GATEWAY_SECRET    # same value as in the Space
-   npx wrangler deploy
-   ```
-3. Add `https://cutwarden.<subdomain>.workers.dev/mcp?key=<CUTWARDEN_TOKEN>` as a custom MCP connector.
+**2. Gateway and site (Cloudflare Workers)**
+1. Set `BACKEND_URL` in `wrangler.jsonc` to your Render URL (no trailing slash).
+2. Connect the repo in Cloudflare (Workers & Pages > Create > Import a repository; deploy command `npx wrangler deploy`), or run `npm install && npx wrangler deploy`.
+3. In the Worker's Settings > Variables and secrets add `CUTWARDEN_GATEWAY_SECRET` (same value as on Render) and `CUTWARDEN_TOKEN` (what clients send).
+4. Add `https://cutwarden.<subdomain>.workers.dev/mcp?key=<CUTWARDEN_TOKEN>` as a custom MCP connector.
 
-Limits to expect: the Space's disk is wiped on every restart, so projects, imported media and renders do not persist (export as you go). Free Spaces sleep after a stretch of inactivity; a Worker cron ping every 12 hours helps, and the gateway answers 503 "waking up" while the Space restarts. Renders on 2 free CPUs are slower than on a paid instance. For GitHub auto-deploy add repo secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `HF_TOKEN` and the repo variable `HF_SPACE`.
-
-Self-hosting without Cloudflare: `docker build -t cutwarden . && docker run -p 7860:7860 cutwarden`, then put your own auth in front.
+Limits: Render's free instance is small (512 MB RAM, a fraction of a CPU), sleeps after 15 idle minutes and its disk is wiped on restart, so export renders as you go. A Worker cron pings the service every 14 minutes to keep it awake; that uses most of the 750 free hours a month, so remove the cron in `wrangler.jsonc` if you run other free Render services. The same Dockerfile also works on Google Cloud Run and other Docker hosts.

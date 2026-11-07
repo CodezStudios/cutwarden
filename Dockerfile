@@ -1,4 +1,4 @@
-# Runs on Hugging Face Spaces (Docker SDK, port 7860) and anywhere else that runs Docker.
+# Runs on Render, Cloud Run, Hugging Face or any Docker host. Listens on $PORT (default 7860).
 FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/* \
  && useradd -m -u 1000 user
@@ -12,4 +12,4 @@ COPY --chown=user cutwarden ./cutwarden
 COPY --chown=user brands ./brands
 RUN pip install --no-cache-dir .
 EXPOSE 7860
-CMD ["cutwarden-mcp", "--http", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["sh", "-c", "cutwarden-mcp --http --host 0.0.0.0 --port ${PORT:-7860}"]

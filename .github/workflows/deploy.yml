@@ -14,10 +14,3 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-  space:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: scripts/deploy_space.sh "${{ vars.HF_SPACE }}"
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}

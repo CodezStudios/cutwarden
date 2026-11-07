@@ -1,6 +1,6 @@
 // Cloudflare Worker (free plan): serves the site (static assets) and exposes the MCP server at /mcp.
-// It checks a token, then forwards to the backend running on a Hugging Face Space.
-//   vars:    BACKEND_URL              e.g. https://<hf-user>-cutwarden.hf.space   (no trailing slash)
+// It checks a token, then forwards to the backend running on a Render web service.
+//   vars:    BACKEND_URL              e.g. https://<your-service>.onrender.com   (no trailing slash)
 //   secrets: CUTWARDEN_TOKEN          what MCP clients must send (Bearer or ?key=)
 //            CUTWARDEN_GATEWAY_SECRET shared with the Space; the backend rejects calls without it
 
@@ -50,7 +50,7 @@ export default {
       return new Response("backend unreachable, retry shortly", { status: 502, headers: CORS });
     }
 
-    // A sleeping Space answers with an HTML "starting up" page instead of MCP.
+    // A sleeping Render service answers with an HTML "starting up" page instead of MCP.
     if ((upstream.headers.get("content-type") || "").includes("text/html")) {
       return new Response("backend is waking up, retry in about a minute", { status: 503, headers: { ...CORS, "retry-after": "60" } });
     }
@@ -60,7 +60,7 @@ export default {
     return out;
   },
 
-  // Free cron trigger: keeps the Space from going to sleep from inactivity.
+  // Free cron trigger: keeps the free Render service from sleeping (it sleeps after 15 idle minutes) from inactivity.
   async scheduled(_event, env) {
     if (env.BACKEND_URL) await fetch(env.BACKEND_URL.replace(/\/$/, "") + "/health").catch(() => {});
   },
